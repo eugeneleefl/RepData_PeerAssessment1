@@ -23,7 +23,8 @@ if (!file.exists("repdata-data-activity.zip")) {
   activity <- read.csv(unz(temp, "activity.csv"), header = T, stringsAsFactors = F)
   unlink(temp)
 } else {
-  activity <- read.csv(unz("repdata-data-activity.zip", "activity.csv"), header = T, stringsAsFactors = F)
+  activity <- read.csv(unz("repdata-data-activity.zip", "activity.csv"), 
+                       header = T, stringsAsFactors = F)
 }
 ```
 ##Mean Total Number of Steps Taken per Day
@@ -31,7 +32,9 @@ If the missing values (NA) are ignored, the distribution of the total number of 
 ```{r histogram_1}
 activity_1=na.omit(activity)
 sum=rowsum(activity_1$steps,activity_1$date)
-hist(sum,breaks=16,xlab='Number of Steps',main='Frequency Distribution of Total Number of Steps per Day',col='blue',xlim=c(0,25000))
+hist(sum,breaks=16,xlab='Number of Steps',
+     main='Frequency Distribution of Total Number of Steps per Day',
+        col='blue',xlim=c(0,25000))
 ```
 
 The histogram shows that the distribution of total steps for days with non-zero number of steps is fairly symmetrical about the mode. Moreover, the mean and median total number of steps is `r mean(sum)` and `r median(sum)` respectively.
@@ -48,7 +51,9 @@ head(interval_steps)
 ```
 The time series for each 5 minute interval is plotted below:
 ```{r time_series_1}
-plot(interval_steps$mean~interval_steps$interval,type='l',xlab='Time interval',ylab='Mean number of steps', main='Mean number of Steps in Each Time Interval Across All Days')
+plot(interval_steps$mean~interval_steps$interval,type='l',xlab='Time interval',
+     ylab='Mean number of steps', 
+        main='Mean number of Steps in Each Time Interval Across All Days')
 ```
 From the time series plot, the maximum number of steps occurs between 500 and 1000 time intervals. The corresponding interval and maximum value is shown below:
 ```{r}
@@ -74,7 +79,9 @@ head(activity_imputed)
 We re-plot the histogram of the distribution of the frequency of the total number of steps:
 ```{r histogram_2}
 sum_imputed=rowsum(activity_imputed$steps,activity_imputed$date)
-hist(sum_imputed,breaks=16,xlab='Number of Steps',main='Frequency Distribution of Total Number of Steps per Day',col='blue',xlim=c(0,25000),ylim=c(0,20))
+hist(sum_imputed,breaks=16,xlab='Number of Steps',
+     main='Frequency Distribution of Total Number of Steps per Day',col='blue',
+        xlim=c(0,25000),ylim=c(0,20))
 ```
 
 The new mean and median is calculated as follows:
@@ -90,7 +97,8 @@ Using the imputed data, we first change the dates to date variable. Then we appl
 ```{r}
 activity_imputed$date <- as.Date(activity_imputed$date, "%Y-%m-%d")
 activity_imputed$weekday <- weekdays(activity_imputed$date)
-activity_imputed$type_of_day <- as.factor(ifelse(activity_imputed$weekday %in% c("Saturday", "Sunday"), "weekend", "weekday"))
+activity_imputed$type_of_day <- as.factor(ifelse(activity_imputed$weekday %in% 
+        c("Saturday", "Sunday"), "weekend", "weekday"))
 summary(activity_imputed$type_of_day)
 ```
 
@@ -102,7 +110,8 @@ head(weekday_steps)
 
 We are now ready to plot the time series for both weekdays and weekends
 ```{r time_series_2}
-qplot(y=mean,x=interval, data = weekday_steps, geom ='line',facets=type_of_day~.,xlab='Time Interval', ylab='Mean Number of Steps')
+qplot(y=mean,x=interval, data = weekday_steps, geom ='line',facets=type_of_day~.,xlab='Time
+      Interval', ylab='Mean Number of Steps')
 ```
 
 From the plot, we see that there is an obvious spike during weekdays in the interval between 500 to 1000. This corresponds to the interval for maximum number of steps stated above. For weekends, the mean number of steps does not go above the 200 mark.

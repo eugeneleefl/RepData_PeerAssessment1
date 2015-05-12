@@ -26,7 +26,8 @@ if (!file.exists("repdata-data-activity.zip")) {
   activity <- read.csv(unz(temp, "activity.csv"), header = T, stringsAsFactors = F)
   unlink(temp)
 } else {
-  activity <- read.csv(unz("repdata-data-activity.zip", "activity.csv"), header = T, stringsAsFactors = F)
+  activity <- read.csv(unz("repdata-data-activity.zip", "activity.csv"), 
+                       header = T, stringsAsFactors = F)
 }
 ```
 ##Mean Total Number of Steps Taken per Day
@@ -35,7 +36,9 @@ If the missing values (NA) are ignored, the distribution of the total number of 
 ```r
 activity_1=na.omit(activity)
 sum=rowsum(activity_1$steps,activity_1$date)
-hist(sum,breaks=16,xlab='Number of Steps',main='Frequency Distribution of Total Number of Steps per Day',col='blue',xlim=c(0,25000))
+hist(sum,breaks=16,xlab='Number of Steps',
+     main='Frequency Distribution of Total Number of Steps per Day',
+        col='blue',xlim=c(0,25000))
 ```
 
 ![plot of chunk histogram_1](Figs/histogram_1-1.png) 
@@ -78,7 +81,9 @@ head(interval_steps)
 The time series for each 5 minute interval is plotted below:
 
 ```r
-plot(interval_steps$mean~interval_steps$interval,type='l',xlab='Time interval',ylab='Mean number of steps', main='Mean number of Steps in Each Time Interval Across All Days')
+plot(interval_steps$mean~interval_steps$interval,type='l',xlab='Time interval',
+     ylab='Mean number of steps', 
+        main='Mean number of Steps in Each Time Interval Across All Days')
 ```
 
 ![plot of chunk time_series_1](Figs/time_series_1-1.png) 
@@ -129,7 +134,9 @@ We re-plot the histogram of the distribution of the frequency of the total numbe
 
 ```r
 sum_imputed=rowsum(activity_imputed$steps,activity_imputed$date)
-hist(sum_imputed,breaks=16,xlab='Number of Steps',main='Frequency Distribution of Total Number of Steps per Day',col='blue',xlim=c(0,25000),ylim=c(0,20))
+hist(sum_imputed,breaks=16,xlab='Number of Steps',
+     main='Frequency Distribution of Total Number of Steps per Day',col='blue',
+        xlim=c(0,25000),ylim=c(0,20))
 ```
 
 ![plot of chunk histogram_2](Figs/histogram_2-1.png) 
@@ -160,7 +167,8 @@ Using the imputed data, we first change the dates to date variable. Then we appl
 ```r
 activity_imputed$date <- as.Date(activity_imputed$date, "%Y-%m-%d")
 activity_imputed$weekday <- weekdays(activity_imputed$date)
-activity_imputed$type_of_day <- as.factor(ifelse(activity_imputed$weekday %in% c("Saturday", "Sunday"), "weekend", "weekday"))
+activity_imputed$type_of_day <- as.factor(ifelse(activity_imputed$weekday %in% 
+        c("Saturday", "Sunday"), "weekend", "weekday"))
 summary(activity_imputed$type_of_day)
 ```
 
@@ -189,7 +197,8 @@ head(weekday_steps)
 We are now ready to plot the time series for both weekdays and weekends
 
 ```r
-qplot(y=mean,x=interval, data = weekday_steps, geom ='line',facets=type_of_day~.,xlab='Time Interval', ylab='Mean Number of Steps')
+qplot(y=mean,x=interval, data = weekday_steps, geom ='line',facets=type_of_day~.,xlab='Time
+      Interval', ylab='Mean Number of Steps')
 ```
 
 ![plot of chunk time_series_2](Figs/time_series_2-1.png) 
